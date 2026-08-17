@@ -1,0 +1,568 @@
+<title>Technic Gear Atlas</title>
+<style>
+  :root{
+    color-scheme: light;
+    --paper:      #f6f2e7;
+    --surface:    #fffdf6;
+    --surface-2:  #efe9d8;
+    --ink:        #211d15;
+    --ink-2:      #5c5546;
+    --ink-3:      #948b76;
+    --line:       #ddd4bd;
+    --line-strong:#c6bb9c;
+    --accent:     #3b6e71;
+    --good:       #0ca30c;
+    --shadow:     rgba(33,29,21,0.08);
+
+    --fam-a:    #2a78d6;  /* Spur — Group A */
+    --fam-b:    #eb6834;  /* Spur — Group B / double-bevel */
+    --fam-tt:   #1baf7a;  /* Turntables */
+    --fam-wc:   #c98500;  /* Worm & Crown (darkened for light-surface contrast) */
+    --fam-diff: #c14e79;  /* Differential (darkened for light-surface contrast) */
+    --fam-rack: #008300;  /* Racks */
+    --fam-iso:  #4a3aa7;  /* Isolated / self-mesh only */
+    --fam-chain:#c93a3a;  /* Sprockets & chain */
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme: dark;
+      --paper:      #15130d;
+      --surface:    #1d1a13;
+      --surface-2:  #262116;
+      --ink:        #f3efe2;
+      --ink-2:      #cabfa4;
+      --ink-3:      #8f8770;
+      --line:       #3a3527;
+      --line-strong:#4c4630;
+      --accent:     #6fa8ab;
+      --good:       #3fd23f;
+      --shadow:     rgba(0,0,0,0.35);
+
+      --fam-a:    #3987e5;
+      --fam-b:    #d95926;
+      --fam-tt:   #199e70;
+      --fam-wc:   #eda100;
+      --fam-diff: #d55181;
+      --fam-rack: #2fbf2f;
+      --fam-iso:  #9085e9;
+      --fam-chain:#e66767;
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme: dark;
+    --paper:      #15130d;
+    --surface:    #1d1a13;
+    --surface-2:  #262116;
+    --ink:        #f3efe2;
+    --ink-2:      #cabfa4;
+    --ink-3:      #8f8770;
+    --line:       #3a3527;
+    --line-strong:#4c4630;
+    --accent:     #6fa8ab;
+    --good:       #3fd23f;
+    --shadow:     rgba(0,0,0,0.35);
+
+    --fam-a:    #3987e5;
+    --fam-b:    #d95926;
+    --fam-tt:   #199e70;
+    --fam-wc:   #eda100;
+    --fam-diff: #d55181;
+    --fam-rack: #2fbf2f;
+    --fam-iso:  #9085e9;
+    --fam-chain:#e66767;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+    line-height:1.5;
+  }
+  .mono{
+    font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  .page{
+    max-width:840px;
+    margin:0 auto;
+    padding:0 20px 80px;
+  }
+
+  /* ---------- hero ---------- */
+  .toothstrip{
+    height:14px;
+    background-image: repeating-linear-gradient(90deg, var(--line-strong) 0 6px, transparent 6px 16px);
+    opacity:.55;
+    margin:0 0 34px;
+  }
+  .hero{ padding-top:6px; }
+  .eyebrow{
+    font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+    font-size:.72rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--accent);
+    font-weight:600;
+  }
+  h1{
+    font-size:clamp(2.1rem,6.4vw,3.6rem);
+    font-weight:800;
+    letter-spacing:-0.01em;
+    line-height:.98;
+    margin:.35em 0 .3em;
+    text-wrap:balance;
+  }
+  .dek{
+    font-size:1.03rem;
+    color:var(--ink-2);
+    max-width:52ch;
+    margin:0 0 26px;
+    text-wrap:balance;
+  }
+  .titleblock{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    border-top:1px solid var(--line-strong);
+    border-bottom:1px solid var(--line-strong);
+    margin-bottom:40px;
+  }
+  .titleblock div{
+    padding:9px 12px;
+    border-left:1px solid var(--line);
+  }
+  .titleblock div:first-child{border-left:none;}
+  .titleblock .k{
+    display:block;
+    font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+    font-size:.62rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    margin-bottom:2px;
+  }
+  .titleblock .v{
+    font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+    font-size:.82rem;
+    font-weight:600;
+    font-variant-numeric:tabular-nums;
+  }
+
+  /* ---------- legend ---------- */
+  .legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px 14px;
+    padding:14px 16px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:8px;
+    margin-bottom:46px;
+  }
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-size:.78rem;
+    color:var(--ink-2);
+  }
+  .swatch{
+    width:11px;height:11px;border-radius:3px;flex:none;
+  }
+
+  /* ---------- family sections ---------- */
+  .family{ margin-bottom:48px; }
+  .family-head{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    border-top:3px solid var(--fam);
+    padding-top:10px;
+    margin-bottom:4px;
+  }
+  .family-head h2{
+    font-size:1.28rem;
+    font-weight:800;
+    margin:0;
+    letter-spacing:-.005em;
+  }
+  .family-code{
+    font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+    font-size:.72rem;
+    color:var(--fam);
+    font-weight:700;
+  }
+  .family-desc{
+    color:var(--ink-2);
+    font-size:.9rem;
+    max-width:62ch;
+    margin:2px 0 16px;
+  }
+  .cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+    gap:12px;
+  }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:7px;
+    padding:12px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    box-shadow:0 1px 2px var(--shadow);
+  }
+  .card-top{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+  }
+  .card svg{ flex:none; width:56px; height:56px; }
+  .card-name{
+    font-weight:700;
+    font-size:.92rem;
+    line-height:1.25;
+  }
+  .card-meta{
+    font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+    font-size:.72rem;
+    color:var(--ink-3);
+    margin-top:3px;
+    font-variant-numeric:tabular-nums;
+  }
+  .card-note{
+    font-size:.78rem;
+    color:var(--ink-2);
+    line-height:1.4;
+  }
+  .mesh-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:5px;
+    margin-top:2px;
+  }
+  .mesh-chip{
+    font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+    font-size:.66rem;
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:2px 8px 2px 6px;
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    color:var(--ink-2);
+  }
+  .mesh-chip b{ color:var(--ink); font-weight:600; }
+  .mesh-empty{
+    font-size:.72rem;
+    color:var(--ink-3);
+    font-style:italic;
+  }
+
+  /* ---------- matrix ---------- */
+  .matrix-section h2, .notes h2{
+    font-size:1.4rem;
+    font-weight:800;
+    margin:0 0 6px;
+  }
+  .section-intro{
+    color:var(--ink-2);
+    font-size:.92rem;
+    max-width:64ch;
+    margin:0 0 16px;
+  }
+  .glyph-legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:16px;
+    font-size:.78rem;
+    color:var(--ink-2);
+    margin-bottom:16px;
+  }
+  .glyph-legend span.g{
+    font-family:ui-monospace,monospace;
+    font-weight:700;
+    margin-right:5px;
+  }
+  .matrix-wrap{
+    overflow-x:auto;
+    border:1px solid var(--line);
+    border-radius:8px;
+    margin-bottom:20px;
+  }
+  table.matrix{
+    border-collapse:collapse;
+    font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+    font-size:.68rem;
+  }
+  table.matrix th, table.matrix td{
+    border:1px solid var(--line);
+    text-align:center;
+    padding:0;
+  }
+  table.matrix th.rowhead{
+    text-align:left;
+    padding:4px 8px;
+    white-space:nowrap;
+    background:var(--surface);
+    position:sticky;
+    left:0;
+    font-weight:600;
+  }
+  table.matrix th.colhead{
+    height:120px;
+    min-width:26px;
+    background:var(--surface);
+  }
+  table.matrix th.colhead div{
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    padding:6px 0;
+    display:inline-block;
+    font-weight:600;
+  }
+  table.matrix td{
+    width:26px;
+    height:26px;
+    color:var(--ink-3);
+  }
+  table.matrix td.self{ background:var(--surface-2); }
+  table.matrix td.spur{ color:var(--good); font-weight:700; }
+  table.matrix td.right{ color:var(--accent); font-weight:700; }
+  table.matrix td.rack{ color:var(--ink-2); font-weight:700; }
+  table.matrix caption{ caption-side:bottom; text-align:left; padding:8px 10px; font-size:.72rem; color:var(--ink-3); }
+
+  /* ---------- notes / footer ---------- */
+  .notes{ margin-top:44px; }
+  .notes ul{ padding-left:1.1em; margin:0; }
+  .notes li{ margin-bottom:9px; font-size:.86rem; color:var(--ink-2); }
+  .notes li b{ color:var(--ink); }
+  footer{
+    margin-top:52px;
+    padding-top:16px;
+    border-top:1px solid var(--line);
+    font-size:.74rem;
+    color:var(--ink-3);
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+</style>
+
+<div class="page">
+  <div class="toothstrip"></div>
+  <header class="hero">
+    <span class="eyebrow">Field reference · LEGO Technic</span>
+    <h1>Technic Gear Atlas</h1>
+    <p class="dek">Every gear, bevel, worm, rack, turntable and sprocket in the Technic system — teeth counts, families, and exactly what meshes with what.</p>
+    <div class="titleblock">
+      <div><span class="k">System</span><span class="v">LEGO Technic</span></div>
+      <div><span class="k">Parts cataloged</span><span class="v">21</span></div>
+      <div><span class="k">Scale</span><span class="v">N.T.S.</span></div>
+      <div><span class="k">Sheet</span><span class="v">1 of 1 · 2026</span></div>
+    </div>
+  </header>
+
+  <nav class="legend" id="legend" aria-label="Gear families"></nav>
+
+  <main id="families"></main>
+
+  <section class="matrix-section">
+    <h2>Compatibility matrix</h2>
+    <p class="section-intro">Standard direct interfaces only — same-axle-spacing meshes a builder gets by just putting the parts together. Community "offset spacing" tricks that force otherwise-incompatible pitches to mesh aren't charted here; see the notes below.</p>
+    <div class="glyph-legend">
+      <div><span class="g" style="color:var(--good)">●</span>parallel / spur mesh</div>
+      <div><span class="g" style="color:var(--accent)">⟂</span>right-angle mesh (bevel · crown · worm · differential)</div>
+      <div><span class="g" style="color:var(--ink-2)">▬</span>rack &amp; pinion (linear)</div>
+      <div><span class="g" style="color:var(--ink-3)">·</span>no standard mesh</div>
+    </div>
+    <div class="matrix-wrap">
+      <table class="matrix" id="matrix"></table>
+    </div>
+  </section>
+
+  <section class="notes">
+    <h2>Notes &amp; caveats</h2>
+    <ul id="notes"></ul>
+  </section>
+
+  <footer>
+    <span>Technic Gear Atlas — a fan reference, not an official LEGO document.</span>
+    <span>Compiled Aug 2026</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var FAMILIES = {
+    a:    {label:"Spur — Group A",              color:"var(--fam-a)",    desc:"The original Technic pitch (1977–). 8/16/24/40-tooth gears mesh freely with each other and with a matching pinion rack."},
+    b:    {label:"Spur — Group B (double-bevel)",color:"var(--fam-b)",    desc:"A finer, later pitch (1999–). 12/20/36-tooth double-bevel gears mesh with each other and a matching rack — but not with Group A."},
+    wc:   {label:"Worm &amp; Crown",             color:"var(--fam-wc)",   desc:"Special-purpose Group A partners: a self-locking worm screw and a crown gear that bridges parallel and right-angle drives."},
+    diff: {label:"Differential",                 color:"var(--fam-diff)", desc:"Splits torque between two outputs through an internal bevel gear set housed in a ring."},
+    tt:   {label:"Turntables",                   color:"var(--fam-tt)",   desc:"Large slewing rings for rotating platforms — driven at their perimeter, not charted against pinion gears here."},
+    rack: {label:"Racks",                        color:"var(--fam-rack)", desc:"Straight or curved linear tracks. Come in two pitches, one per spur family."},
+    iso:  {label:"Isolated / self-mesh only",     color:"var(--fam-iso)",  desc:"Bevels and wheels deliberately built to mesh only with an identical copy of themselves."},
+    chain:{label:"Sprockets &amp; chain",         color:"var(--fam-chain)",desc:"A separate drive system entirely — chain-tread links ride on sprockets and never mesh tooth-to-tooth with a gear."}
+  };
+
+  var ITEMS = [
+    {id:"a8",   fam:"a",  name:"8-Tooth Gear",              teeth:"8t",  vt:8,  shape:"gear", meta:"1977",  note:"The smallest common spur gear."},
+    {id:"a16",  fam:"a",  name:"16-Tooth Gear",              teeth:"16t", vt:16, shape:"gear", meta:"1979"},
+    {id:"a24",  fam:"a",  name:"24-Tooth Gear",              teeth:"24t", vt:22, shape:"gear", meta:"1977",  note:"Also sold as a white clutch gear that slips above a torque threshold — meshes identically."},
+    {id:"a40",  fam:"a",  name:"40-Tooth Gear",               teeth:"40t", vt:26, shape:"gear", meta:"1977",  note:"The largest Group A spur gear; a heavy reduction stage."},
+
+    {id:"b12",  fam:"b",  name:"12-Tooth Double-Bevel",       teeth:"12t", vt:12, shape:"gear", meta:"1999",  note:"Runs parallel like a spur gear, or at 90° against another bevel."},
+    {id:"b20",  fam:"b",  name:"20-Tooth Double-Bevel",       teeth:"20t", vt:18, shape:"gear", meta:"1999"},
+    {id:"b36",  fam:"b",  name:"36-Tooth Double-Bevel",       teeth:"36t", vt:26, shape:"gear", meta:"2002",  note:"The largest System-pitch gear; treated as parallel-only here."},
+
+    {id:"worm", fam:"wc", name:"Worm Gear (Screw)",           teeth:"1 thread", vt:1, shape:"worm", meta:"1985", note:"Non-backdrivable — locks the output. Turns only 24t/40t Group A gears."},
+    {id:"crown24", fam:"wc", name:"24-Tooth Crown Gear",      teeth:"24t", vt:20, shape:"gear", meta:"1977", note:"Doubles as a Group A spur gear and mates 90° with bevels."},
+
+    {id:"diff", fam:"diff", name:"Differential Housing",      teeth:"~28t ring", vt:28, shape:"ring", meta:"", note:"Its input ring meshes at 90° with a bevel pinion."},
+
+    {id:"tt28", fam:"tt", name:"Small Turntable",              teeth:"28t", vt:28, shape:"ring", meta:"2012"},
+    {id:"tt56", fam:"tt", name:"Large Turntable",               teeth:"56t", vt:32, shape:"ring", meta:"1990", note:"Studless since 2004; a 60-tooth bevel-edge variant ran 2015–2022."},
+
+    {id:"rackA", fam:"rack", name:"Gear Rack — Group A pitch", teeth:"linear", vt:0, shape:"rack", meta:"", note:"Matches any 8/16/24/40-tooth pinion."},
+    {id:"rackB", fam:"rack", name:"Gear Rack — System pitch",  teeth:"linear", vt:0, shape:"rack", meta:"", note:"Matches 12/20/36-tooth double-bevel pinions."},
+
+    {id:"bevel14",   fam:"iso", name:"14-Tooth Bevel (original)", teeth:"14t", vt:14, shape:"gear", meta:"1980", note:"Superseded by the 12t bevel; meshes only with its own kind and the differential."},
+    {id:"bevel2022", fam:"iso", name:"22t / 14t Thick Bevel",      teeth:"22t / 14t", vt:20, shape:"gear", meta:"2022", note:"A newer, stronger pair deliberately isolated from every other bevel."},
+    {id:"knob",      fam:"iso", name:"Knob Wheel",                 teeth:"6 lobes", vt:6, shape:"knob", meta:"", note:"Chunky positive-drive wheel; meshes only with another knob wheel."},
+
+    {id:"spr6",  fam:"chain", name:"Small Sprocket", teeth:"6t",  vt:6,  shape:"sprocket", meta:"57520", note:"Chain-drive only."},
+    {id:"spr10", fam:"chain", name:"Large Sprocket", teeth:"10t", vt:10, shape:"sprocket", meta:"57519"},
+    {id:"spr14", fam:"chain", name:"XL Sprocket",    teeth:"14t", vt:14, shape:"sprocket", meta:"42529"},
+    {id:"spr20", fam:"chain", name:"Thin/Dual Sprocket", teeth:"20t", vt:18, shape:"sprocket", meta:"32089", note:"One chain loop can run mixed sprocket sizes together."}
+  ];
+
+  var EDGES = [
+    ["a8","a16","spur"],["a8","a24","spur"],["a8","a40","spur"],
+    ["a16","a24","spur"],["a16","a40","spur"],["a24","a40","spur"],
+    ["a8","rackA","rack"],["a16","rackA","rack"],["a24","rackA","rack"],["a40","rackA","rack"],
+    ["worm","a24","right"],["worm","a40","right"],
+    ["crown24","a8","spur"],["crown24","a16","spur"],["crown24","a24","spur"],["crown24","a40","spur"],
+    ["crown24","rackA","rack"],["crown24","worm","right"],["crown24","b12","right"],["crown24","bevel14","right"],
+    ["b12","b20","right"],["b12","b36","spur"],["b20","b36","spur"],
+    ["b12","rackB","rack"],["b20","rackB","rack"],["b36","rackB","rack"],
+    ["diff","b12","right"],["diff","bevel14","right"]
+  ];
+
+  var byId = {};
+  ITEMS.forEach(function(it){ byId[it.id] = it; it.links = []; });
+  EDGES.forEach(function(e){
+    byId[e[0]].links.push({id:e[1], mode:e[2]});
+    byId[e[1]].links.push({id:e[0], mode:e[2]});
+  });
+
+  function polar(r,a){ return [50+r*Math.cos(a), 50+r*Math.sin(a)]; }
+  function gearPoly(teeth, outerR, rootR){
+    var pts=[], step=2*Math.PI/teeth;
+    for(var i=0;i<teeth;i++){
+      var a0=i*step;
+      pts.push(polar(rootR, a0));
+      pts.push(polar(outerR, a0+step*0.15));
+      pts.push(polar(outerR, a0+step*0.45));
+      pts.push(polar(rootR,  a0+step*0.6));
+    }
+    return pts.map(function(p){return p[0].toFixed(1)+","+p[1].toFixed(1);}).join(" ");
+  }
+
+  function icon(it){
+    var fam = "var(--fam-"+it.fam+")";
+    var vt = Math.max(4, Math.min(30, it.vt||8));
+    var body = "";
+    if(it.shape==="gear"){
+      body = '<polygon points="'+gearPoly(vt,42,32)+'" fill="'+fam+'" opacity=".92"/><circle cx="50" cy="50" r="8" fill="var(--surface)"/>';
+    } else if(it.shape==="sprocket"){
+      body = '<polygon points="'+gearPoly(vt,40,34)+'" fill="'+fam+'" opacity=".92"/><circle cx="50" cy="50" r="7" fill="var(--surface)"/><circle cx="50" cy="50" r="26" fill="none" stroke="var(--surface)" stroke-width="2" opacity=".5"/>';
+    } else if(it.shape==="ring"){
+      body = '<polygon points="'+gearPoly(vt,44,37)+'" fill="'+fam+'" opacity=".92"/><circle cx="50" cy="50" r="22" fill="var(--surface)"/><circle cx="50" cy="50" r="22" fill="none" stroke="'+fam+'" stroke-width="2" opacity=".5"/>';
+    } else if(it.shape==="knob"){
+      body = '<polygon points="'+gearPoly(6,40,26)+'" fill="'+fam+'" opacity=".92"/><circle cx="50" cy="50" r="9" fill="var(--surface)"/>';
+    } else if(it.shape==="worm"){
+      body = '<rect x="30" y="16" width="40" height="68" rx="14" fill="'+fam+'" opacity=".92"/>' +
+        [0,1,2,3,4].map(function(i){ var y=22+i*13; return '<line x1="30" y1="'+y+'" x2="70" y2="'+(y+9)+'" stroke="var(--surface)" stroke-width="3" opacity=".55"/>'; }).join('');
+    } else if(it.shape==="rack"){
+      var teeth=[];
+      for(var i=0;i<7;i++){
+        var x=14+i*11;
+        teeth.push('<polygon points="'+x+',60 '+(x+4)+',34 '+(x+7)+',34 '+(x+11)+',60" fill="'+fam+'" opacity=".92"/>');
+      }
+      body = '<rect x="10" y="58" width="80" height="14" fill="'+fam+'" opacity=".92"/>' + teeth.join('');
+    }
+    return '<svg viewBox="0 0 100 100" aria-hidden="true">'+body+'</svg>';
+  }
+
+  var glyphFor = {spur:"●", right:"⟂", rack:"▬"};
+
+  function meshRow(it){
+    if(!it.links.length) return '<div class="mesh-empty">No standard direct mesh</div>';
+    return '<div class="mesh-row">' + it.links.map(function(l){
+      var partner = byId[l.id];
+      return '<span class="mesh-chip">'+glyphFor[l.mode]+' <b>'+partner.name.split(' — ')[0].replace(/\(.*\)/,'').trim()+'</b></span>';
+    }).join('') + '</div>';
+  }
+
+  // legend
+  var legendEl = document.getElementById("legend");
+  Object.keys(FAMILIES).forEach(function(k){
+    var f = FAMILIES[k];
+    legendEl.innerHTML += '<div class="legend-item"><span class="swatch" style="background:'+f.color+'"></span>'+f.label+'</div>';
+  });
+
+  // family sections
+  var famEl = document.getElementById("families");
+  Object.keys(FAMILIES).forEach(function(k){
+    var f = FAMILIES[k];
+    var items = ITEMS.filter(function(it){ return it.fam===k; });
+    var html = '<section class="family" style="--fam:'+f.color+'">' +
+      '<div class="family-head"><h2>'+f.label+'</h2><span class="family-code mono">'+items.length+' part'+(items.length===1?'':'s')+'</span></div>' +
+      '<p class="family-desc">'+f.desc+'</p>' +
+      '<div class="cards">' +
+      items.map(function(it){
+        return '<article class="card">' +
+          '<div class="card-top">' + icon(it) +
+          '<div><div class="card-name">'+it.name+'</div>' +
+          '<div class="card-meta">'+it.teeth + (it.meta ? ' &nbsp;·&nbsp; '+it.meta : '')+'</div></div>' +
+          '</div>' +
+          (it.note ? '<div class="card-note">'+it.note+'</div>' : '') +
+          meshRow(it) +
+          '</article>';
+      }).join('') +
+      '</div></section>';
+    famEl.innerHTML += html;
+  });
+
+  // matrix
+  var mx = document.getElementById("matrix");
+  var head = '<tr><th class="rowhead"></th>' + ITEMS.map(function(it){
+    return '<th class="colhead"><div>'+it.name+'</div></th>';
+  }).join('') + '</tr>';
+
+  var rows = ITEMS.map(function(row){
+    var cells = ITEMS.map(function(col){
+      if(row.id===col.id) return '<td class="self" title="Same part"></td>';
+      var link = row.links.find(function(l){ return l.id===col.id; });
+      if(link) return '<td class="'+link.mode+'" title="'+row.name+' ↔ '+col.name+'">'+glyphFor[link.mode]+'</td>';
+      return '<td title="'+row.name+' ↔ '+col.name+': no standard mesh">·</td>';
+    }).join('');
+    return '<tr><th class="rowhead" style="border-left:4px solid var(--fam-'+row.fam+')">'+row.name+'</th>'+cells+'</tr>';
+  }).join('');
+
+  mx.innerHTML = '<caption>Scroll to see every part × part relationship. Row and column order matches the family sections above.</caption>' + head + rows;
+
+  // notes
+  var NOTES = [
+    "<b>Group A vs. Group B don't natively mesh.</b> The 8/16/24/40-tooth family and the 12/20/36-tooth double-bevel family use different tooth pitches. Builders can sometimes force a mesh (e.g. 24t↔12t) by spacing axles off-grid — a known community technique, not a designed interface, so it isn't charted here.",
+    "<b>The worm gear is one-way.</b> It can turn a 24t or 40t gear, but a 24t/40t gear can't turn it back — useful for locking mechanisms and unsuitable anywhere back-drive is needed.",
+    "<b>Turntables are driven at the rim</b>, typically by a small gear or worm pressed against their outer teeth, but which pinion pitch is 'standard' isn't consistently documented — left off the matrix rather than guessed.",
+    "<b>Sprockets never mesh with gears</b> at all. They connect only through Technic chain-tread links, and a single chain loop happily mixes sprocket sizes (e.g. a 6t driving a 14t) — that's the one compatibility axis in this subsystem, and it's a chain relationship, not a tooth mesh, so it isn't in the matrix.",
+    "Sourced from fan references (Rebrickable, BrickNerd, Technicopedia and community write-ups), not LEGO's own documentation — solid for planning a build, not spec-grade for manufacturing."
+  ];
+  document.getElementById("notes").innerHTML = NOTES.map(function(n){ return '<li>'+n+'</li>'; }).join('');
+})();
+</script>
